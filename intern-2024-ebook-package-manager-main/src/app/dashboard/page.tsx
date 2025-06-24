@@ -1,5 +1,5 @@
 "use client";
-"use client";
+
 import {
   Box,
   Paper,
@@ -13,6 +13,7 @@ import CardData from "../ui/dashboard/datacard";
 import DisplayTable from "../ui/dashboard/table";
 import { useEffect, useState } from "react";
 import axios from "axios";
+
 const list = [
   {
     id: 1,
@@ -20,11 +21,11 @@ const list = [
   },
   {
     id: 2,
-    name: "packages",
+    name: "Packages",
   },
   {
     id: 3,
-    name: "processes",
+    name: "Process",
   },
 ];
 
@@ -34,29 +35,34 @@ type packageType = {
   subscription_price: number;
   active: boolean;
 };
+
 type Process = {
   id: number;
   name: string;
   active: boolean;
   effectivedate: Date;
 };
+
 type bookType = {
   id: number;
   name: string;
   active: boolean;
 };
+
 export default function Dashboard() {
   const [processes, setProcesses] = useState<Process[]>([]);
   const [packages, setPackages] = useState<packageType[]>([]);
   const [books, setBooks] = useState<bookType[]>([]);
+
   const fetchPackages = async () => {
     try {
       const response = await axios.get<packageType[]>("/api/packages");
       setPackages(response.data);
     } catch (err) {
-      console.log("Failed to fetch packages.");
+      console.log(`Failed to fetch packages. ${err}`);
     }
   };
+
   const fetchProcesses = async () => {
     try {
       const response = await axios.get<Process[]>(
@@ -64,22 +70,25 @@ export default function Dashboard() {
       );
       setProcesses(response.data);
     } catch (err) {
-      console.log("Failed to fetch process.");
+      console.log(`Failed to fetch processes. ${err}`);
     }
   };
+
   const fetchBooks = async () => {
     try {
       const response = await axios.get<bookType[]>("/api/books");
       setBooks(response.data);
     } catch (err) {
-      console.log("Failed to fetch books.");
+      console.log(`Failed to fetch books. ${err}`);
     }
   };
+
   useEffect(() => {
     fetchPackages();
     fetchBooks();
     fetchProcesses();
   }, []);
+
   return (
     <Box
       component="main"
@@ -101,8 +110,8 @@ export default function Dashboard() {
         }}
       >
         <CardData text="Number of Books" data={books.length} />
-        <CardData text="Number of packages" data={packages.length} />
-        <CardData text="Number of Processes" data={processes.length} />
+        <CardData text="Number of Packages" data={packages.length} />
+        <CardData text="Number of Process" data={processes.length} />
       </Box>
       <Box
         component="main"
