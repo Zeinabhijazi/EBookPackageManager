@@ -1,0 +1,783 @@
+openapi: 3.0.0
+info:
+  title: Swagger eBook - OpenAPI 3.0
+  description:  >
+    Design an openAPI for our project 'EBook Package Manager'
+  version: 1.0.11
+paths:
+  # OPERATIONS ON PROCESS
+  /processes:
+    get:
+      summary: Returns a list of all processes.
+      tags:
+        - Process
+      responses:
+        '200':
+          description: Successfull operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/process'
+        '404':
+          $ref: '#/components/responses/NF'
+  /processes/{processId}:  
+    parameters:
+      - in: path
+        name: processId
+        schema:
+          type: integer
+          format: int64
+        description: Id that needs to be used to get, update and delete the details of the process.
+        required: true
+    get: 
+      summary: Retrieves the details of a specific process identified by processId.
+      tags:
+        - Process
+      responses:
+        '200':
+          description: successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/process'
+        '400':
+          $ref: '#/components/responses/P400'
+        '404':
+          $ref: '#/components/responses/NF'
+    put:
+      summary: Update a specific process identified by processId. 
+      tags:
+        - Process
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/process'
+        description: Update an existent process in the system.
+      responses:
+        '200':
+          description: Process updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/process'
+        '400':
+          $ref: '#/components/responses/P400'
+        '404':
+          $ref: '#/components/responses/NF'
+    delete:
+      summary: Delete a specific process identified by processId.
+      tags:
+        - Process
+      responses:
+        '200':
+          description: Deleted successfully.
+        '400':
+          $ref: '#/components/responses/P400'
+        '404':
+          $ref: '#/components/responses/NF'
+  # OPERATIONS ON BOOK
+  /processes/{processId}/books:
+    parameters:
+      - in: path
+        name: processId
+        schema:
+          type: integer
+          format: int64
+        description: Id that needs to be used to add a book and get a list of all book in the system
+        required: true
+    post:
+      summary: Adds a new book to the system for a specific process identified by processId.
+      tags:
+        - Book
+      requestBody:
+        description: Create a new book. 
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ebook_diff'
+        required: true
+      responses:
+        '200':
+          description: Book added successfully.
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ebook_diff'
+        '400':
+          $ref: '#/components/responses/NF'
+        '500':
+          $ref: '#/components/responses/IE'
+    get:
+      summary: Gets a list of all books that being modified or created by this process identified by processId.
+      tags:
+        - Book
+      responses:
+        '200':
+          description: successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ebook_diff'
+        '400':
+          $ref: '#/components/responses/B400'
+        '404':
+          $ref: '#/components/responses/NF'
+  /processes/{processId}/books/{bookId}:
+    parameters:
+      - in: path
+        name: processId
+        schema:
+          type: integer
+          format: int64
+        description: Id that needs to be used to modify the details of book for a specific process.
+        required: true
+      - in: path
+        name: bookId
+        schema:
+          type: integer
+          format: int64
+        description: Id that needs to be used to modify operations on a specific book.
+        required: true
+    get:
+      summary: Retrieves the details of a specific book identified by bookId for a specific process identified by processId.
+      tags:
+        - Book
+      responses:
+        '200':
+          description: successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ebook_diff'
+        '400':
+          $ref: '#/components/responses/B400'
+        '404':
+          $ref: '#/components/responses/NF'
+    put:
+      summary: Update a specific book details identified by bookId for a specific process identified by processId.
+      tags:
+        - Book
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ebook_diff'
+        description: Update an existent book in the system.
+      responses:
+        '200':
+          description: Process updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ebook_diff'
+        '400':
+          $ref: '#/components/responses/B400'
+        '404':
+          $ref: '#/components/responses/NF'
+    delete:
+      summary: Delete a specific book identified by bookId for a specific process identified by processId. 
+      tags:
+        - Book
+      responses:
+        '200':
+          description: Deleted successfully.
+        '400':
+          $ref: '#/components/responses/B400'
+        '404':
+          $ref: '#/components/responses/NF'
+  /processes/books/{bookId}:
+    get:
+      summary: Retrieves the details of a specific books for a process.
+      tags:
+        - Book
+      parameters:
+        - in: path
+          name: bookId
+          schema:
+            type: integer
+            format: int64
+          description: Id that needs to be used to get the details of book in the system
+          required: true
+      responses:
+        '200':
+          description: successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ebook_diff'
+        '400':
+          $ref: '#/components/responses/B400'
+        '404':
+          $ref: '#/components/responses/NF'
+  /books:
+    get:
+      summary: Gets a current version of all books.
+      tags:
+        - Book
+      responses:
+        '200':
+          description: successfull operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ebook'
+        '400':
+          $ref: '#/components/responses/B400'
+        '404':
+          $ref: '#/components/responses/NF'
+  /books/{bookId}:
+    get:
+      summary: Retrieves the details of a specific book of current version identified by bookId.
+      tags:
+        - Book
+      parameters:
+        - in: path
+          name: bookId
+          schema:
+            type: integer
+            format: int64
+          description: Id that needs to be used to get the details of this book.
+          required: true
+      responses:
+        '200':
+          description: successfull operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ebook'
+        '400':
+          $ref: '#/components/responses/B400'
+        '404':
+          $ref: '#/components/responses/NF'
+  # OPERATIONS ON PACKAGE
+  /processes/{processId}/packages:
+    parameters:
+      - in: path
+        name: processId
+        schema:
+          type: integer
+          format: int64
+        description: Id that needs to be used to add a package and get a list of all packages in the system.
+        required: true
+    post:
+      summary: Adds a new package to the system for a specific process identified by processId.
+      tags:
+        - Package
+      requestBody:
+        description: Create a new package. 
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/package_diff'
+        required: true
+      responses:
+        '200':
+          description: Package added successfully
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/package_diff'
+        '500':
+          $ref: '#/components/responses/IE'
+    get:
+      summary: Gets a list of all packages that being modified or created by this process identified by processId.
+      tags:
+        - Package
+      responses:
+        '200':
+          description: successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/package_diff'
+        '400':
+          $ref: '#/components/responses/Pa400'
+        '404':
+          $ref: '#/components/responses/NF'
+  /processes/{processId}/packages/{packageId}:
+    parameters:
+      - in: path
+        name: processId
+        schema:
+          type: integer
+          format: int64
+        description: Id that needs to be used to modify the details of package for a specific process.
+        required: true
+      - in: path
+        name: packageId
+        schema:
+          type: integer
+          format: int64
+        description: Id that needs to be used to modify operations on a specific package.
+        required: true
+    get:
+      summary: Retrieves the details of a specific package identified by packageId for a specific process identified by processId.
+      tags:
+        - Package
+      responses:
+        '200':
+          description: successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/package_diff'
+        '400':
+          $ref: '#/components/responses/Pa400'
+        '404':
+          $ref: '#/components/responses/NF'
+    put:
+      summary: Update a specific package details identified by packageId for a specific process identified by processId.
+      tags:
+        - Package
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/package_diff'
+        description: Update an existent package in the system.
+      responses:
+        '200':
+          description: Package updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/package_diff'
+        '400':
+          $ref: '#/components/responses/Pa400'
+        '404':
+          $ref: '#/components/responses/NF'
+    delete:
+      summary: Delete a specific package identified by packageId for a specific process identified by processId. 
+      tags:
+        - Package
+      responses:
+        '200':
+          description: Deleted successfully
+        '400':
+          $ref: '#/components/responses/Pa400'
+        '404':
+          $ref: '#/components/responses/NF'
+  /processes/packages/{packageId}:
+    get:
+      summary: Retrieves the details of a specific package for a process.
+      tags:
+        - Package
+      parameters:
+        - in: path
+          name: packageId
+          schema:
+            type: integer
+            format: int64
+          description: Id that needs to be used to get the details of book in the system
+          required: true
+      responses:
+        '200':
+          description: successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/package_diff'
+        '400':
+          $ref: '#/components/responses/Pa400'
+        '404':
+          $ref: '#/components/responses/NF'
+  /packages:
+    get:
+      summary: Gets a current version of all packages.
+      tags:
+        - Package
+      responses:
+        '200':
+          description: successfull operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/package'
+        '400':
+          $ref: '#/components/responses/Pa400'
+        '404':
+          $ref: '#/components/responses/NF'
+  /packages/{packageId}:
+    get:
+      summary: Retrieves the details of a specific package of current version identified by packageId.
+      tags:
+        - Package
+      parameters:
+        - in: path
+          name: packageId
+          schema:
+            type: integer
+            format: int64
+          description: Id that needs to be used to get the details of this package.
+          required: true
+      responses:
+        '200':
+          description: successfull operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/package'
+        '400':
+          $ref: '#/components/responses/Pa400'
+        '404':
+          $ref: '#/components/responses/NF'
+  # OPERATIONS ON BOOKPACKAGE
+  /processes/{processId}/packages/{packageId}/books/{bookId}:
+    parameters:
+      - in: path
+        name: processId
+        schema:
+          type: integer
+          format: int64
+        description: Id that needs to be used to modify the details of package for a specific process.
+        required: true
+      - in: path
+        name: packageId
+        schema:
+          type: integer
+          format: int64
+        description: Id that needs to be used to modify operations on a specific package.
+        required: true
+      - in: path
+        name: bookId
+        schema:
+          type: integer
+          format: int64
+        description: Id that needs to be used to modify operations on a specific book.
+        required: true
+    post:
+      summary: Add a book to a package.
+      tags:
+        - BookPackage
+      responses:
+        '200':
+          description: Book added successfully to a package.
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ebooks_packages_diff'
+        '500':
+          $ref: '#/components/responses/IE'
+    delete:
+      summary: Removes a book from a package, deleting the association.
+      tags:
+        - BookPackage
+      responses:
+        '200':
+          description: Deleted successfully.
+        '400':
+          description: Invalid Id
+        '404':
+          $ref: '#/components/responses/NF'
+  /processes/{processId}/books/{bookId}/packages:
+    get:
+      summary: Retrieves a list of all packages for a specific book identified by bookId.
+      tags:
+        - BookPackage
+      parameters:
+      - in: path
+        name: processId
+        schema:
+          type: integer
+          format: int64
+        description: Id that needs to be used to modify the details of package for a specific process.
+        required: true
+      - in: path
+        name: bookId
+        schema:
+          type: integer
+          format: int64
+        description: Id that needs to be used to modify operations on a specific book.
+        required: true
+      responses:
+        '200':
+          description: successfull operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ebooks_packages_diff'
+        '400':
+          description: Invalid Id
+        '404':
+          $ref: '#/components/responses/NF'
+  /processes/{processId}/packages/{packageId}/books:
+    get:
+      summary: Retrieves a list of all books for a specific package identified by packageId.
+      tags:
+        - BookPackage
+      parameters:
+        - in: path
+          name: processId
+          schema:
+            type: integer
+            format: int64
+          description: Id that needs to be used to modify the details of package for a specific process.
+          required: true
+        - in: path
+          name: packageId
+          schema:
+            type: integer
+            format: int64
+          description: Id that needs to be used to modify operations on a specific package.
+          required: true
+      responses:
+        '200':
+          description: successfull operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ebooks_packages_diff'
+        '400':
+          description: Invalid Id
+        '404':
+          $ref: '#/components/responses/NF'
+  /books/{bookId}/packages:
+    get:
+      summary: Retrieves a list of all packages for a specific book identified by bookId of current version.
+      tags:
+        - BookPackage
+      parameters:
+      - in: path
+        name: bookId
+        schema:
+          type: integer
+          format: int64
+        description: Id that needs to be used to modify operations on a specific book.
+        required: true
+      responses:
+        '200':
+          description: successfull operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ebooks_packages'
+        '400':
+          $ref: '#/components/responses/B400'
+        '404':
+          $ref: '#/components/responses/NF'
+  /packages/{packageId}/books:
+    get:
+      summary: Retrieves a list of all books for a specific package identified by packageId of current version.
+      tags:
+        - BookPackage
+      parameters:
+      - in: path
+        name: packageId
+        schema:
+          type: integer
+          format: int64
+        description: Id that needs to be used to modify operations on a specific package.
+        required: true
+      responses:
+        '200':
+          description: successfull operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ebooks_packages'
+        '400':
+          $ref: '#/components/responses/Pa400'
+        '404':
+          $ref: '#/components/responses/NF'
+tags:
+  - name: Process
+    description: Everything about process
+  - name: Book
+    description: Everything about Book
+  - name: Package
+    description: Everything about Package
+  - name: BookPackage
+    description: Everything about the common between Book and Package
+components:
+  responses:
+    IE:
+      description: Internal Server Error
+    NF:
+      description: Not Found
+    P400:
+      description: Process id is not valid
+    B400:
+      description: Book id is not valid
+    Pa400:
+      description: Package id is not valid
+  schemas:
+    process:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        effectiveDate:
+          type: string
+          format: date-time
+        name:
+          type: string
+        active:
+          type: boolean
+          default: false
+      required:
+        - id
+        - effectiveDate
+        - name
+        - active
+    ebook:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        isbn:
+          type: string
+        name:
+          type: string
+        ebook_price:
+          type: integer
+          format: float
+        ebook_rent_price:
+          type: integer
+          format: float
+        author:
+          type: string
+        latestprocess_id:
+          $ref: '#/components/schemas/process'
+        active:
+          type: boolean
+          default: false
+      required:
+        - id
+        - isbn
+        - name
+        - ebook_price
+        - ebook_rent_price
+        - author
+        - latestprocess_id
+        - active
+    ebook_diff:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        ebook_id:
+          $ref: '#/components/schemas/ebook'
+        process_id:
+          $ref: '#/components/schemas/process'
+        isbn:
+          type: string
+        name:
+          type: string
+        ebook_price:
+          type: integer
+          format: float
+        ebook_rent_price:
+          type: integer
+          format: float
+        author:
+          type: string
+        active:
+          type: boolean
+          default: false
+      required:
+        - id
+        - isbn
+        - ebook_id
+        - process_id
+        - name
+        - ebook_price
+        - ebook_rent_price
+        - author
+        - active
+    package:
+      type: object
+      properties: 
+        id: 
+          type: integer
+          format: int64
+        name:
+          type: string
+        subscription_price:
+          type: integer
+          format: float
+        latestprocess_id:
+          $ref: '#/components/schemas/process'  
+        active: 
+          type: boolean
+          default: false
+      required:
+        - id
+        - name
+        - subscription_price
+        - latestprocess_id
+        - active
+    package_diff:
+      type: object
+      properties: 
+        id: 
+          type: integer
+          format: int64
+        package_id: 
+          $ref: '#/components/schemas/package'
+        process_id: 
+          $ref: '#/components/schemas/process'
+        name:
+          type: string
+        subscription_price:
+          type: integer
+          format: float
+        active: 
+          type: boolean
+          default: false
+      required:
+        - id
+        - package_id
+        - process_id
+        - name
+        - subscription_price
+        - active
+    ebooks_packages:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        ebook_id:
+          $ref: '#/components/schemas/ebook'
+        package_id:
+          $ref: '#/components/schemas/package'
+        latestprocess_id:
+          $ref: '#/components/schemas/process'  
+        name:
+          type: string
+        active: 
+          type: boolean
+          default: false
+      required:
+        - id
+        - ebook_id
+        - package_id
+        - latestprocess_id
+        - name
+        - active
+    ebooks_packages_diff:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        ebooks_packages_id:
+          $ref: '#/components/schemas/ebooks_packages'
+        process_id:
+          $ref: '#/components/schemas/process'
+        name:
+          type: string
+        active: 
+          type: boolean
+          default: false
+      required:
+        - id
+        - ebooks_packages_id
+        - process_id
+        - name
+        - active
+    

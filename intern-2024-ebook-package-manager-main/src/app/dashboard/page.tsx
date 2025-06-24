@@ -55,15 +55,17 @@ export default function Dashboard() {
       setPackages(response.data);
     } catch (err) {
       console.log("Failed to fetch packages.");
-    } 
+    }
   };
   const fetchProcesses = async () => {
     try {
-      const response = await axios.get<Process[]>("/api/processes/activeProcesses");
+      const response = await axios.get<Process[]>(
+        "/api/processes/activeProcesses"
+      );
       setProcesses(response.data);
     } catch (err) {
       console.log("Failed to fetch process.");
-    } 
+    }
   };
   const fetchBooks = async () => {
     try {
@@ -71,7 +73,7 @@ export default function Dashboard() {
       setBooks(response.data);
     } catch (err) {
       console.log("Failed to fetch books.");
-    } 
+    }
   };
   useEffect(() => {
     fetchPackages();
@@ -131,7 +133,7 @@ export default function Dashboard() {
               sx={{
                 flexGrow: "1",
                 minHeight: "150px",
-                width:"20vw",
+                width: "20vw",
                 maxHeight: "calc(100vh - 200px)",
                 overflow: "auto",
               }}
@@ -148,37 +150,39 @@ export default function Dashboard() {
               >
                 List of {i.name}
               </Typography>
-              {i.id != 3 &&
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="center">Name</TableCell>
-                    <TableCell align="center">Details</TableCell>
-                  </TableRow>
-                </TableHead>
-                <DisplayTable
-                  id={i.id}
-                  processdata={processes}
-                  bookdata={books}
-                  packagesdata={packages}
-                />
-              </Table>}
-              {i.id == 3 &&
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="center">Name</TableCell>
-                    <TableCell align="center">Details</TableCell>
-                    <TableCell align="center">EffectiveDate</TableCell>
-                  </TableRow>
-                </TableHead>
-                <DisplayTable
-                  id={i.id}
-                  processdata={processes}
-                  bookdata={books}
-                  packagesdata={packages}
-                />
-              </Table>}
+              {i.id != 3 && (
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell align="center">Name</TableCell>
+                      <TableCell align="center">Details</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <DisplayTable
+                    id={i.id}
+                    processdata={processes}
+                    bookdata={books}
+                    packagesdata={packages}
+                  />
+                </Table>
+              )}
+              {i.id == 3 && (
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell align="center">Name</TableCell>
+                      <TableCell align="center">Details</TableCell>
+                      <TableCell align="center">EffectiveDate</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <DisplayTable
+                    id={i.id}
+                    processdata={processes}
+                    bookdata={books}
+                    packagesdata={packages}
+                  />
+                </Table>
+              )}
             </Paper>
           ))}
         </Box>
