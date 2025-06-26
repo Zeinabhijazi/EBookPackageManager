@@ -1,6 +1,5 @@
-"use client";
-import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -13,35 +12,30 @@ import {
 } from "@mui/material";
 
 type packageHistory = {
-  id: number;
+  id: string;
   name: string;
   subscription_price: number;
   active: boolean;
-  process_id:number;
+  process_id: number;
 };
 
-export default function History({id}:Readonly<{id:number}>) {
-  const [packagesHistory, setPackagesHistory,] = useState<packageHistory[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+export default function History({ packageId }: { readonly packageId: string }) {
+  const [packagesHistory, setPackagesHistory] = useState<packageHistory[]>([]);
+
   useEffect(() => {
-    const fetchPackagesHistory = async () => {
+    const fetchPackageHistory = async () => {
       try {
-        const response = await axios.get<packageHistory[]>(`/api/processes/packages/${id}`);
+        const response = await axios.get(
+          `/api/processes/packages/${packageId}`
+        );
         setPackagesHistory(response.data);
       } catch (err) {
-        setError("Failed to fetch packages history.");
-      } finally {
-        setLoading(false);
+        console.log(`Failed to fetch packages history. ${err}`);
       }
     };
+    fetchPackageHistory();
+  }, [packageId]);
 
-    fetchPackagesHistory();
-  }, [id]);
-  if (loading)
-    return (<Typography>loding...</Typography>)
-  if (error)
-    return (<Typography>{error}</Typography>)
   return (
     <TableContainer
       component={Paper}
@@ -64,12 +58,12 @@ export default function History({id}:Readonly<{id:number}>) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {packagesHistory.map((book) => (
-            <TableRow key={book.id}>
-              <TableCell>{book.name}</TableCell>
-              <TableCell>{book.active ? "True" : "False"}</TableCell>
-              <TableCell>{book.subscription_price}$</TableCell>
-              <TableCell> {book.process_id}</TableCell>
+          {packagesHistory.map((item) => (
+            <TableRow key={item.id}>
+              <TableCell>{item.name}</TableCell>
+              <TableCell>{item.active ? "True" : "False"}</TableCell>
+              <TableCell>{item.subscription_price}$</TableCell>
+              <TableCell> {item.process_id}</TableCell>
             </TableRow>
           ))}
         </TableBody>

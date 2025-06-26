@@ -1,4 +1,4 @@
-import { FC,useState } from "react";
+import { FC, useState } from "react";
 import {
   Typography,
   TableContainer,
@@ -10,14 +10,17 @@ import {
   TableHead,
   TableCell,
   Switch,
-  FormControlLabel
+  FormControlLabel,
 } from "@mui/material";
+
 interface Package {
   name: string;
 }
+
 interface Package {
   name: string;
 }
+
 interface BookLayoutProps {
   name: string;
   isbn: string;
@@ -39,159 +42,160 @@ const BookLayout: FC<BookLayoutProps> = ({
   active,
   packages,
 }) => {
-  
   const [showGroupA, setShowGroupA] = useState(false);
 
-  const handleToggle = (event : React.ChangeEvent<HTMLInputElement>) => {
+  const handleToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
     setShowGroupA(event.target.checked);
   };
 
   const groupAAttributes = (
     <Box className="flex">
-            <Box>
-              <Typography
-                variant="h2"
-                className=" text-base text-black font-semibold md:text-2xl "
-              >
-                Title:
-              </Typography>
-              <Typography className="font-serif font-normal text-2xl mb-10">
-                {name}
-              </Typography>
-              <Typography
-                variant="h2"
-                className=" text-base text-black font-semibold md:text-2xl"
-              >
-                REF:
-              </Typography>
-              <Typography className="font-serif font-normal text-lg md:text-2xl">
-                {isbn}
-              </Typography>
-            </Box>
-            <Box className="ml-16">
-              <Typography
-                variant="h2"
-                className=" text-base text-black font-semibold md:text-2xl"
-              >
-                Creator:
-              </Typography>
-              <Typography className="font-serif text-lg md:text-2xl mb-10 ">
-                {author}
-              </Typography>
-              <Typography
-                variant="h2"
-                className=" text-base text-black font-semibold  md:text-2xl"
-              >
-                Active:
-              </Typography>
-              <Typography className="font-serif text-lg md:text-2xl font-normal">
-                {active ? "True" : "False"}
-              </Typography>
-            </Box>
-            <Box className="ml-12 md:ml-16 w-[120px]">
-                <Typography
-                  variant="h2"
-                  className=" text-base text-black font-semibold  md:text-2xl"
-                >
-                  Rent Price:
-                </Typography>
-                <Typography className="font-serif ml-2 text-lg md:text-2xl mb-10 font-normal">
-                  {rent_price}$
-                </Typography>
-                <Typography
-                  variant="h2"
-                  className=" text-base text-black font-semibold md:text-2xl"
-                >
-                  ProcessId:
-                </Typography>
-                <Typography className="font-serif ml-2 text-lg md:text-2xl font-normal mb-4">
-                  {latest_process}
-                </Typography>
-            </Box>
-            </Box>
+      <Box>
+        <Typography
+          variant="h4"
+          className=" text-base text-black font-semibold md:text-lg "
+        >
+          Title:
+        </Typography>
+        <Typography className="font-serif font-normal text-lg mb-10">
+          {name}
+        </Typography>
+        <Typography
+          variant="h4"
+          className=" text-base text-black font-semibold md:text-lg"
+        >
+          REF:
+        </Typography>
+        <Typography className="font-serif font-normal text-lg md:text-lg">
+          {isbn}
+        </Typography>
+      </Box>
+      <Box className="ml-16">
+        <Typography
+          variant="h4"
+          className=" text-base text-black font-semibold md:text-lg"
+        >
+          Creator:
+        </Typography>
+        <Typography className="font-serif text-lg md:text-lg mb-10 ">
+          {author}
+        </Typography>
+        <Typography
+          variant="h4"
+          className=" text-base text-black font-semibold  md:text-lg"
+        >
+          Active:
+        </Typography>
+        <Typography className="font-serif text-lg md:text-lg font-normal">
+          {active ? "True" : "False"}
+        </Typography>
+      </Box>
+      <Box className="ml-12 md:ml-16 w-[120px]">
+        <Typography
+          variant="h4"
+          className=" text-base text-black font-semibold  md:text-lg"
+        >
+          Rent Price:
+        </Typography>
+        <Typography className="font-serif ml-2 text-lg md:text-lg mb-10 font-normal">
+          {rent_price}$
+        </Typography>
+        <Typography
+          variant="h4"
+          className=" text-base text-black font-semibold md:text-lg"
+        >
+          ProcessId:
+        </Typography>
+        <Typography className="font-serif ml-2 text-lg md:text-lg font-normal mb-4">
+          {latest_process}
+        </Typography>
+      </Box>
+    </Box>
   );
 
   const groupBAttributes = (
-         <Box className="flex">
-            <Box>
-              <Typography
-                variant="h2"
-                className=" text-base text-black font-semibold md:text-2xl "
-              >
-                Name:
-              </Typography>
-              <Typography className="font-serif font-normal text-2xl mb-10">
-                {name}
-              </Typography>
-              <Typography
-                variant="h2"
-                className=" text-base text-black font-semibold md:text-2xl"
-              >
-                ISBN:
-              </Typography>
-              <Typography className="font-serif font-normal text-lg md:text-2xl">
-                {isbn}
-              </Typography>
-            </Box>
-            <Box className="ml-16">
-              <Typography
-                variant="h2"
-                className=" text-base text-black font-semibold md:text-2xl"
-              >
-                Author:
-              </Typography>
-              <Typography className="font-serif text-lg md:text-2xl mb-10 ">
-                {author}
-              </Typography>
-              <Typography
-                variant="h2"
-                className=" text-base text-black font-semibold  md:text-2xl"
-              >
-                Status:
-              </Typography>
-              <Typography className="font-serif text-lg md:text-2xl font-normal">
-                {active ? "True" : "False"}
-              </Typography>
-            </Box>
-            <Box className="ml-12 md:ml-16">
-                <Typography
-                  variant="h2"
-                  className=" text-base text-black font-semibold  md:text-2xl"
-                >
-                  Price:
-                </Typography>
-                <Typography className="font-serif ml-2 text-lg md:text-2xl font-normal mb-10">
-                  {price}$
-                </Typography>
-                <Typography
-                  variant="h2"
-                  className=" text-base text-black font-semibold md:text-2xl"
-                >
-                  ProcessId:
-                </Typography>
-                <Typography className="font-serif ml-2 text-lg md:text-2xl font-normal mb-4">
-                  {latest_process}
-                </Typography>
-            </Box>
-            </Box>
+    <Box className="flex">
+      <Box>
+        <Typography
+          variant="h4"
+          className=" text-base text-black font-semibold md:text-lg "
+        >
+          Name:
+        </Typography>
+        <Typography className="font-serif font-normal text-lg mb-10">
+          {name}
+        </Typography>
+        <Typography
+          variant="h4"
+          className=" text-base text-black font-semibold md:text-lg"
+        >
+          ISBN:
+        </Typography>
+        <Typography className="font-serif font-normal text-lg md:text-lg">
+          {isbn}
+        </Typography>
+      </Box>
+      <Box className="ml-16">
+        <Typography
+          variant="h4"
+          className=" text-base text-black font-semibold md:text-lg"
+        >
+          Author:
+        </Typography>
+        <Typography className="font-serif text-lg md:text-lg mb-10 ">
+          {author}
+        </Typography>
+        <Typography
+          variant="h4"
+          className=" text-base text-black font-semibold  md:text-lg"
+        >
+          Status:
+        </Typography>
+        <Typography className="font-serif text-lg md:text-lg font-normal">
+          {active ? "True" : "False"}
+        </Typography>
+      </Box>
+      <Box className="ml-12 md:ml-16">
+        <Typography
+          variant="h4"
+          className=" text-base text-black font-semibold  md:text-lg"
+        >
+          Price:
+        </Typography>
+        <Typography className="font-serif ml-2 text-lg md:text-lg font-normal mb-10">
+          {price}$
+        </Typography>
+        <Typography
+          variant="h4"
+          className=" text-base text-black font-semibold md:text-lg"
+        >
+          ProcessId:
+        </Typography>
+        <Typography className="font-serif ml-2 text-lg md:text-lg font-normal mb-4">
+          {latest_process}
+        </Typography>
+      </Box>
+    </Box>
   );
 
   return (
     <Card sx={{ display: "flex" }} className="bg-gray-50">
-      <Box className=" flex flex-col w-full  ml-3 ">
+      <Box className=" flex flex-col w-full  ml-3 mt-3">
         <Typography variant="h2" className="relative  text-4xl font-bold">
           Live Details:
         </Typography>
         <Box className="flex mt-4">
-          <Box sx={{
-            width:"55vw",
-            height:"37vh"
-            }}>
+          <Box
+            sx={{
+              width: "55vw",
+              height: "37vh",
+            }}
+          >
             <FormControlLabel
               control={<Switch checked={showGroupA} onChange={handleToggle} />}
-              label={!showGroupA? "Buy":"Rent"}
+              label={!showGroupA ? "Buy" : "Rent"}
             />
-            <Box sx={{display:"flex"}}>
+            <Box sx={{ display: "flex" }}>
               {showGroupA ? groupAAttributes : groupBAttributes}
             </Box>
           </Box>
