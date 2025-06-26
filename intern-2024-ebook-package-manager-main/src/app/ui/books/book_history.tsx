@@ -23,15 +23,15 @@ interface History {
 }
 
 export default function History({ bookId }: { readonly bookId: string }) {
-  const [history, setHistory] = useState<History[]>([]);
+  const [booksHistory, setBooksHistory] = useState<History[]>([]);
 
   useEffect(() => {
     const fetchBookHistory = async () => {
       try {
         const response = await axios.get(`/api/processes/books/${bookId}`);
-        setHistory(response.data);
+        setBooksHistory(response.data);
       } catch (e) {
-        console.log("error fetching book history..");
+        console.log(`error fetching book history.. ${e}`);
       }
     };
     fetchBookHistory();
@@ -62,15 +62,15 @@ export default function History({ bookId }: { readonly bookId: string }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {history.map((book) => (
-            <TableRow key={book.id}>
-              <TableCell>{book.isbn}</TableCell>
-              <TableCell>{book.active ? "True" : "False"}</TableCell>
-              <TableCell>{book.name}</TableCell>
-              <TableCell>{book.author}</TableCell>
-              <TableCell>{book.ebook_price}$</TableCell>
-              <TableCell>{book.ebook_rent_price}$</TableCell>
-              <TableCell>{book.process_id}</TableCell>
+          {booksHistory.map((item) => (
+            <TableRow key={item.id}>
+              <TableCell>{item.isbn}</TableCell>
+              <TableCell>{item.active ? "True" : "False"}</TableCell>
+              <TableCell>{item.name}</TableCell>
+              <TableCell>{item.author}</TableCell>
+              <TableCell>{item.ebook_price}$</TableCell>
+              <TableCell>{item.ebook_rent_price}$</TableCell>
+              <TableCell>{item.process_id}</TableCell>
             </TableRow>
           ))}
         </TableBody>

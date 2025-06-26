@@ -25,7 +25,7 @@ export default function Process() {
       setProcessData(process.data);
       setFilteredData(process.data);
     } catch (error) {
-      console.log("Failed to fetch processes.");
+      console.log(`Failed to fetch processes. ${error}`);
     }
   };
 
@@ -78,7 +78,7 @@ export default function Process() {
           pr: 1,
         }}
       >
-        <ProcessModal fetchProcesses={fetchProcesses}/>
+        <ProcessModal fetchProcesses={fetchProcesses} />
       </Box>
       <Box sx={{ display: "flex", my: 5 }}>
         <Search

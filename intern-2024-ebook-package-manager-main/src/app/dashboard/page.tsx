@@ -69,8 +69,8 @@ export default function Dashboard() {
         "/api/processes/activeProcesses"
       );
       setProcesses(response.data);
-    } catch (err) {
-      console.log(`Failed to fetch processes. ${err}`);
+    } catch (error) {
+      console.log(`Failed to fetch processes. ${error}`);
     }
   };
 
@@ -78,8 +78,8 @@ export default function Dashboard() {
     try {
       const response = await axios.get<bookType[]>("/api/books");
       setBooks(response.data);
-    } catch (err) {
-      console.log(`Failed to fetch books. ${err}`);
+    } catch (error) {
+      console.log(`Failed to fetch books. ${error}`);
     }
   };
 
