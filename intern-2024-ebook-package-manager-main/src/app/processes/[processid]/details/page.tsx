@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import DetailsPop from "@/app/ui/props/detailsPop";
@@ -18,7 +19,6 @@ import DeleteBook from "@/app/ui/props/BookDeletePop";
 import UpdatePackage from "@/app/ui/props/PakageUpdatePop";
 import DeletePackage from "@/app/ui/props/PackageDeletePop";
 import ProcessDetails from "@/app/ui/props/Request";
-
 interface Books {
   id: string;
   name: string;
@@ -29,11 +29,10 @@ interface Books {
   isbn: string;
   ebook_id: number;
 }
-
 interface Process {
   name: string;
   effectiveDate: string;
-  active:boolean;
+  active: boolean;
 }
 
 type packageHistoryforprocess = {
@@ -49,44 +48,50 @@ export default function Props({
 }) {
   const [processBooks, setProcessBooks] = useState<Books[]>([]);
   const [process, setProcess] = useState<Process>();
-  const [packagesHistoryProcess, setPackagesHistoryProcess] = useState<packageHistoryforprocess[]>([]);
-  
+  const [packagesHistoryProcess, setPackagesHistoryProcess] = useState<
+    packageHistoryforprocess[]
+  >([]);
+
   const fetchProcessBooks = async () => {
     try {
       const response = await axios.get(
         `/api/processes/${params.processid}/books`
       );
       setProcessBooks(response.data);
-    } catch (e) {
-      console.log("error fetching the book of this process..");
+    } catch (error) {
+      console.log(`Error fetching the book of this process..  ${error}`);
     }
   };
+
   const fetchPackagesHistory = async () => {
     try {
       const response = await axios.get<packageHistoryforprocess[]>(
         `/api/processes/${params.processid}/packages`
       );
       setPackagesHistoryProcess(response.data);
-    } catch (err) {
-      console.log("Failed to fetch packages history for a process.");
+    } catch (error) {
+      console.log(`Failed to fetch packages history for a process. ${error}`);
     }
   };
+
   useEffect(() => {
     fetchProcessBooks();
     fetchPackagesHistory();
   }, [params.processid]);
-  
+
   useEffect(() => {
     const fetchProcess = async () => {
       try {
-        const response = await axios.get<Process>(`/api/processes/${params.processid}`);
+        const response = await axios.get<Process>(
+          `/api/processes/${params.processid}`
+        );
         setProcess(response.data);
-      } catch (e) {
-        console.log("failed to get process details..");
+      } catch (error) {
+        console.log(`Failed to get process details.. ${error}`);
       }
     };
     fetchProcess();
-  }, [params.processid,process?.active]);
+  }, [params.processid, process?.active]);
 
   return (
     <Box
@@ -126,12 +131,12 @@ export default function Props({
         >
           Process Details
         </Typography>
-        <ProcessDetails 
-          processid={String(params.processid)} 
+        <ProcessDetails
+          processid={String(params.processid)}
           active={process?.active ?? false}
           fetchBooks={fetchProcessBooks}
           fetchPackages={fetchPackagesHistory}
-          />
+        />
       </Box>
       <Box
         sx={{
@@ -183,16 +188,17 @@ export default function Props({
                     />
                   </TableCell>
                   <TableCell align="center">
-                  <UpdateBook
-                        bookId={String(book.ebook_id)}
-                        processId={String(params.processid)}
-                        active={process?.active ? process.active : false}
-                      />
-                  <DeleteBook
-                        bookid={Number(book.id)}
-                        processid={params.processid}
-                        active={process?.active ? process.active : false}
-                        />
+                    <UpdateBook
+                      bookId={String(book.ebook_id)}
+                      processId={String(params.processid)}
+                      active={process?.active ?? false}
+                      fetchBooks = {fetchProcessBooks}
+                    />
+                    <DeleteBook
+                      bookid={Number(book.id)}
+                      processid={params.processid}
+                      active={process?.active ?? false}
+                    />
                   </TableCell>
                 </TableRow>
               ))}
@@ -243,13 +249,14 @@ export default function Props({
                     <UpdatePackage
                       packageId={String(record.package_id)}
                       processId={String(params.processid)}
-                      active={process?.active ? process.active : false}
-                      />
+                      active={process?.active ?? false}
+                      fetchPackages = {fetchPackagesHistory}
+                    />
                     <DeletePackage
                       packageid={record.id}
                       processid={params.processid}
-                      active={process?.active ? process.active : false}
-                      />
+                      active={process?.active ?? false}
+                    />
                   </TableCell>
                 </TableRow>
               ))}

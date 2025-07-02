@@ -1,23 +1,25 @@
 "use client";
 
+import {
+  Modal,
+  Box,
+  Button,
+  Typography,
+  TextField,
+  Alert,
+  Stack,
+} from "@mui/material";
 import React, { useState } from "react";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import TextField from "@mui/material/TextField";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import PostAddIcon from "@mui/icons-material/PostAdd";
+import CheckIcon from "@mui/icons-material/Check";
 import { Dayjs } from "dayjs";
 import { DateValidationError } from "@mui/x-date-pickers";
 import axios from "axios";
-import Alert from "@mui/material/Alert";
-import Stack from "@mui/material/Stack";
-import CheckIcon from "@mui/icons-material/Check";
 
 const modalStyle = {
   position: "absolute",
@@ -39,22 +41,23 @@ interface UpdateProcessModal {
   fetchProcesses: () => void;
 }
 
-const ProcessModal: React.FC<UpdateProcessModal> = ({
-  fetchProcesses,
-}) => {
+const ProcessModal: React.FC<UpdateProcessModal> = ({ fetchProcesses }) => {
   const [open, setOpen] = useState(false);
 
   const [name, setName] = useState("");
   const [date, setDate] = useState<Dayjs | null>(null);
-  const [done, setDone] = useState<boolean | null>(null);
+
   const [dateError, setDateError] = useState<DateValidationError | null>(null);
   const [errors, setErrors] = useState<{ name?: string; date?: string }>({});
-  const [alert, setAlert] = useState<string | null>(null);
-  
+
+  const [successAlert, setSuccessAlert] = useState(false);
+  const [warningAlert, setWarningAlert] = useState(false);
+  const [alertText, setAlertText] = useState("");
+
   const handleOpen = () => setOpen(true);
+
   const handleClose = () => {
     setOpen(false);
-    setDone(null)
     setName("");
     setDate(null);
     setErrors({ name: "", date: "" });
@@ -91,21 +94,32 @@ const ProcessModal: React.FC<UpdateProcessModal> = ({
       if (validate()) {
         const response = await axios.post("/api/processes", { name, date });
         if (response.status === 201) {
-          setAlert("Added Successfully");
+          setAlertText("Added Successfully");
+          setSuccessAlert(true);
+          // Hide alert after 3 seconds
+          setTimeout(() => {
+            setSuccessAlert(false);
+          }, 3000);
           // Clear the inputs
           setDate(null);
           setName("");
           fetchProcesses();
         }
-        setDone(true)
       }
     } catch (error: any) {
       if (error.response) {
-        setAlert(error.response.data.message);
+        setAlertText(error.response.data.message);
+        setWarningAlert(true);
+        setTimeout(() => {
+          setWarningAlert(false);
+        }, 3000);
       } else {
-        setAlert("An unexpected error occurred. Please try again.");
+        setAlertText("An unexpected error occurred. Please try again.");
+        setWarningAlert(true);
+        setTimeout(() => {
+          setWarningAlert(false);
+        }, 3000);
       }
-      setDone(false)
     }
   };
 
@@ -199,19 +213,19 @@ const ProcessModal: React.FC<UpdateProcessModal> = ({
               Add
             </Button>
             <Stack sx={{ width: "100%" }}>
-            {done === true && (
-                  <Alert
-                    sx={{ margin: "10px" }}
-                    icon={<CheckIcon fontSize="inherit" />}
-                    severity="success"
-                  >
-                    {alert}
-                  </Alert>
+              {successAlert && (
+                <Alert
+                  sx={{ margin: "10px" }}
+                  icon={<CheckIcon fontSize="inherit" />}
+                  severity="success"
+                >
+                  {alertText}
+                </Alert>
               )}
-              {done === false && (
-                  <Alert sx={{ margin: "10px" }} severity="warning">
-                    {alert}
-                  </Alert>
+              {warningAlert && (
+                <Alert sx={{ margin: "10px" }} severity="warning">
+                  {alertText}
+                </Alert>
               )}
             </Stack>
           </Box>
@@ -219,6 +233,6 @@ const ProcessModal: React.FC<UpdateProcessModal> = ({
       </Modal>
     </Box>
   );
-}
+};
 
 export default ProcessModal;

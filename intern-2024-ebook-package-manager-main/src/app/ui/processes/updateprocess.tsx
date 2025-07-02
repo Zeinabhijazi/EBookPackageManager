@@ -1,20 +1,24 @@
 "use client";
-import React, { useState } from "react";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
+
+import {
+  Modal,
+  Box,
+  Button,
+  Typography,
+  TextField,
+  Alert,
+  Stack,
+} from "@mui/material";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
+import EditIcon from "@mui/icons-material/Edit";
+import { useState } from "react";
+import axios from "axios";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import TextField from "@mui/material/TextField";
-import CloseIcon from "@mui/icons-material/Close";
-import EditIcon from "@mui/icons-material/Edit";
 import dayjs, { Dayjs } from "dayjs";
 import { DateValidationError } from "@mui/x-date-pickers";
-import axios from "axios";
-import Alert from "@mui/material/Alert";
-import Stack from "@mui/material/Stack";
 
 const modalStyle = {
   position: "absolute",
@@ -42,15 +46,23 @@ const UpdateProcessModal: React.FC<UpdateProcessModal> = ({
   fetchProcesses,
 }) => {
   const [open, setOpen] = useState(false);
+
   const [name, setName] = useState("");
   const [date, setDate] = useState<Dayjs | null>(null);
+
   const [dateError, setDateError] = useState<DateValidationError | null>(null);
   const [errors, setErrors] = useState<{ name?: string; date?: string }>({});
-  const [successAlert, setSuccessAlert] = useState<string | null>(null);
-  const [errorAlert, setErrorAlert] = useState<string | null>(null);
+
+  const [successAlert, setSuccessAlert] = useState(false);
+  const [warningAlert, setWarningAlert] = useState(false);
+  const [alertText, setAlertText] = useState("");
 
   const handleOpen = async () => {
     setOpen(true);
+    setSuccessAlert(false);
+    setWarningAlert(false);
+    setAlertText("");
+
     // Get the record for this ID
     if (!processId) return; // Ensure processId is available
     try {
@@ -67,8 +79,6 @@ const UpdateProcessModal: React.FC<UpdateProcessModal> = ({
 
   const handleClose = () => {
     setOpen(false);
-    setSuccessAlert(null);
-    setErrorAlert(null);
   };
 
   const handleChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -107,18 +117,24 @@ const UpdateProcessModal: React.FC<UpdateProcessModal> = ({
           date: dateISO,
         });
         if (response.status === 201) {
-          setSuccessAlert("Updated Successfully");
-          // Clear the inputs
-          setDate(null);
-          setName("");
+          setAlertText("Updated Successfully");
+          setSuccessAlert(true);
           fetchProcesses();
         }
       }
     } catch (error: any) {
       if (error.response) {
-        setErrorAlert(error.response.data.message);
+        setAlertText(error.response.data.message);
+        setWarningAlert(true);
+        setTimeout(() => {
+          setWarningAlert(false);
+        }, 3000);
       } else {
-        setErrorAlert("An unexpected error occurred. Please try again.");
+        setAlertText("An unexpected error occurred. Please try again.");
+        setWarningAlert(true);
+        setTimeout(() => {
+          setWarningAlert(false);
+        }, 3000);
       }
     }
   };
@@ -155,7 +171,7 @@ const UpdateProcessModal: React.FC<UpdateProcessModal> = ({
           <Box sx={{ display: "flex" }}>
             <EditIcon color="primary" sx={{ fontSize: 35, pr: 1 }} />
             <Typography variant="h3" sx={{ fontSize: 32 }}>
-              Edit a process
+              Update a Process
             </Typography>
           </Box>
           <Box
@@ -213,8 +229,20 @@ const UpdateProcessModal: React.FC<UpdateProcessModal> = ({
               Update
             </Button>
             <Stack sx={{ width: "100%" }}>
-              {successAlert && <Alert severity="success">{successAlert}</Alert>}
-              {errorAlert && <Alert severity="error">{errorAlert}</Alert>}
+              {successAlert && (
+                <Alert
+                  sx={{ margin: "10px" }}
+                  icon={<CheckIcon fontSize="inherit" />}
+                  severity="success"
+                >
+                  {alertText}
+                </Alert>
+              )}
+              {warningAlert && (
+                <Alert sx={{ margin: "10px" }} severity="warning">
+                  {alertText}
+                </Alert>
+              )}
             </Stack>
           </Box>
         </Box>
