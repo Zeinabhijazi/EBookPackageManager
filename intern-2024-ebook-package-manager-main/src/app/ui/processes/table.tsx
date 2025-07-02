@@ -108,9 +108,10 @@ const StickyHeadTable: React.FC<ProcessModalProps> = ({
         fetchProcesses();
       }
     } catch (error) {
-      console.log("Something wrong!!!");
+      console.log("Something wrong!!!", error);
     }
   };
+  
   const handleDeploy = async () => {
     if (recordId === null) return;
     try {
@@ -121,7 +122,7 @@ const StickyHeadTable: React.FC<ProcessModalProps> = ({
         fetchProcesses();
       }
     } catch (error) {
-      console.log("Something wrong!!!");
+      console.log("Something wrong!!!", error);
     }
   };
 

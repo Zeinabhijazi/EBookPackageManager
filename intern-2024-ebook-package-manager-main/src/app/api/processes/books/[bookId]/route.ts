@@ -20,6 +20,7 @@ export async function GET(request: NextRequest, context: Context) {
        id = $1`,
       [id]
     );
+
     const { name, isbn, author, ebook_price, ebook_rent_price } = book.rows[0];
     const result = await pool.query(
       `SELECT 
@@ -33,7 +34,7 @@ export async function GET(request: NextRequest, context: Context) {
     return NextResponse.json(result.rows, { status: 200 });
   } catch (error) {
     return NextResponse.json(
-      { message: "internal server error" },
+      { message: `internal server error ${error}` },
       { status: 500 }
     );
   }

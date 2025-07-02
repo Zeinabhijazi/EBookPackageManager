@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import { blue } from "@mui/material/colors";
+
 export default function Sidenavbar() {
   function stringAvatar(name: string) {
     return {
